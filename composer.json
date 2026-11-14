@@ -1,0 +1,22 @@
+{
+    "name": "shagalni/shared",
+    "description": "this is a shared package",
+    "type": "library",
+    "require": {
+        "php": "^8.5",
+        "laravel/framework": "13.x-dev"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Shagalni\\Shared\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Youssef",
+            "email": "youssefsayedcs1@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
