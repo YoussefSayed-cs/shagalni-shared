@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Shagalni\Shared\Models;
 
-use App\Enums\ApplicationStatus;
+use Shagalni\Shared\Enums\ApplicationStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

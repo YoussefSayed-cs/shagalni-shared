@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace Shagalni\Shared\Models;
 
-use App\Enums\AccountStatus;
-use App\Enums\UserRole;
+use Database\Factories\UserFactory;
+use Shagalni\Shared\Enums\AccountStatus;
+use Shagalni\Shared\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -33,6 +35,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
 
     protected function casts(): array
     {

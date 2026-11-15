@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace Shagalni\Shared\Models;
 
-use App\Enums\AccountStatus;
-use App\Enums\EmploymentType;
-use App\Enums\ExperienceLevel;
-use App\Enums\JobStatus;
-use App\Enums\RegistrationStatus;
-use App\Enums\WorkLocationType;
+use Shagalni\Shared\Enums\AccountStatus;
+use Shagalni\Shared\Enums\EmploymentType;
+use Shagalni\Shared\Enums\ExperienceLevel;
+use Shagalni\Shared\Enums\JobStatus;
+use Shagalni\Shared\Enums\RegistrationStatus;
+use Shagalni\Shared\Enums\WorkLocationType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;

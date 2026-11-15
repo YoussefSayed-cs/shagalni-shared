@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Shagalni\Shared\Models;
 
-use App\Enums\ResumeFileType;
+use Shagalni\Shared\Enums\ResumeFileType;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

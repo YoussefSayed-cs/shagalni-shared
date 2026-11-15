@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Notifications;
+namespace Shagalni\Shared\Notifications;
 
-use App\Models\Application;
+use Shagalni\Shared\Models\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
