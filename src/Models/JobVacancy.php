@@ -2,18 +2,18 @@
 
 namespace Shagalni\Shared\Models;
 
-use Shagalni\Shared\Enums\AccountStatus;
-use Shagalni\Shared\Enums\EmploymentType;
-use Shagalni\Shared\Enums\ExperienceLevel;
-use Shagalni\Shared\Enums\JobStatus;
-use Shagalni\Shared\Enums\RegistrationStatus;
-use Shagalni\Shared\Enums\WorkLocationType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Shagalni\Shared\Enums\AccountStatus;
+use Shagalni\Shared\Enums\EmploymentType;
+use Shagalni\Shared\Enums\ExperienceLevel;
+use Shagalni\Shared\Enums\JobStatus;
+use Shagalni\Shared\Enums\RegistrationStatus;
+use Shagalni\Shared\Enums\WorkLocationType;
 
 class JobVacancy extends Model
 {
@@ -22,7 +22,6 @@ class JobVacancy extends Model
     protected $table = 'job_vacancies';
 
     protected $fillable = [
-        'company_id',
         'job_category_id',
         'title',
         'description',
@@ -35,8 +34,6 @@ class JobVacancy extends Model
         'salary_max',
         'experience_level',
         'application_deadline',
-        'status',
-        'archived_at',
     ];
 
     protected function casts(): array
@@ -70,7 +67,7 @@ class JobVacancy extends Model
 
     /**
      * Single eligibility rule used for public visibility and applying.
-     * Active job + deadline not passed + Approved company + Active owner.
+     * Active job, valid deadline, Approved company, and active owner without a deletion request.
      */
     public function isAcceptingApplications(): bool
     {
@@ -82,7 +79,8 @@ class JobVacancy extends Model
 
         return $company !== null
             && $company->registration_status === RegistrationStatus::Approved
-            && $company->owner?->status === AccountStatus::Active;
+            && $company->owner?->status === AccountStatus::Active
+            && $company->owner?->deletion_requested_at === null;
     }
 
     /**
@@ -100,7 +98,8 @@ class JobVacancy extends Model
             ->whereHas('company', function (Builder $company) {
                 $company->where('registration_status', RegistrationStatus::Approved->value)
                     ->whereHas('owner', function (Builder $owner) {
-                        $owner->where('status', AccountStatus::Active->value);
+                        $owner->where('status', AccountStatus::Active->value)
+                            ->whereNull('deletion_requested_at');
                     });
             });
     }

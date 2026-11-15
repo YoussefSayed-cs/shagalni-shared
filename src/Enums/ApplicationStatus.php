@@ -12,7 +12,7 @@ enum ApplicationStatus: string
     case Rejected = 'rejected';
     case Withdrawn = 'withdrawn';
 
-    // FR-94: الحالات النهائية مفيش بعدها تغيير
+    
     public function isTerminal(): bool
     {
         return in_array($this, [
@@ -20,5 +20,25 @@ enum ApplicationStatus: string
             self::Rejected,
             self::Withdrawn,
         ]);
+    }
+
+    public function next(): ?self
+    {
+        return match ($this) {
+            self::Pending => self::UnderReview,
+            self::UnderReview => self::Shortlisted,
+            self::Shortlisted => self::Interview,
+            self::Interview => self::Accepted,
+            default => null,
+        };
+    }
+
+    public function canTransitionTo(self $to): bool
+    {
+        if ($this->isTerminal()) {
+            return false;
+        }
+
+        return $to === self::Rejected || $to === $this->next();
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Shagalni\Shared\Models;
 
-use Shagalni\Shared\Enums\RegistrationStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Shagalni\Shared\Enums\RegistrationStatus;
 
 class Company extends Model
 {
@@ -15,17 +15,12 @@ class Company extends Model
     protected $table = 'companies';
 
     protected $fillable = [
-        'owner_id',
         'name',
         'description',
         'industry',
         'location',
         'website',
         'logo',
-        'registration_status',
-        'rejection_reason',
-        'reviewed_by',
-        'reviewed_at',
     ];
 
     protected function casts(): array
