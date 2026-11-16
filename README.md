@@ -7,6 +7,11 @@ Shared Laravel models and enums used by the Shagalni applications.
 Every app that sends the account lifecycle notifications must define the
 `account-deletion.cancel` and `account-reactivation.confirm` route names.
 
+## Application notification events
+
+- `ApplicationSubmitted` is dispatched by the Portal after its application-submission transaction commits. The shared listener notifies the owning Company Owner.
+- `ApplicationStatusUpdated` and `ApplicationWithdrawn` are dispatched by the shared `ApplicationStatusHistoryObserver` after the history transaction commits. The observer ignores initial history rows. The status-update listener notifies an eligible Job Seeker; the withdrawal listener notifies the owning Company Owner.
+
 ## Local development
 
 The applications may use a Composer path repository pointing to a sibling

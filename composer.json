@@ -12,6 +12,13 @@
             "Shagalni\\Shared\\": "src/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Shagalni\\Shared\\SharedServiceProvider"
+            ]
+        }
+    },
     "authors": [
         {
             "name": "Youssef",

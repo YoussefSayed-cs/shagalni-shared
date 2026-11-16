@@ -20,6 +20,11 @@ class AccountDeletionRequested extends Notification implements ShouldQueue
         return ['mail'];
     }
 
+    public function shouldSend(object $notifiable, string $channel): bool
+    {
+        return $notifiable->deletion_requested_at !== null;
+    }
+
     public function toMail(object $notifiable): MailMessage
     {
         $requestedAt = $notifiable->deletion_requested_at;
