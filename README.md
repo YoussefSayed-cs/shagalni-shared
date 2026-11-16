@@ -2,6 +2,11 @@
 
 Shared Laravel models and enums used by the Shagalni applications.
 
+## Required route names
+
+Every app that sends the account lifecycle notifications must define the
+`account-deletion.cancel` and `account-reactivation.confirm` route names.
+
 ## Local development
 
 The applications may use a Composer path repository pointing to a sibling
