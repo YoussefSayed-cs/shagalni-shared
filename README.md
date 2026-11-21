@@ -12,6 +12,15 @@ Every app that sends the account lifecycle notifications must define the
 - `ApplicationSubmitted` is dispatched by the Portal after its application-submission transaction commits. The shared listener notifies the owning Company Owner.
 - `ApplicationStatusUpdated` and `ApplicationWithdrawn` are dispatched by the shared `ApplicationStatusHistoryObserver` after the history transaction commits. The observer ignores initial history rows. The status-update listener notifies an eligible Job Seeker; the withdrawal listener notifies the owning Company Owner.
 
+## AI analysis contracts
+
+- `Shagalni\Shared\Ai\DocumentParser` and `Shagalni\Shared\Ai\ResumeAnalyzer` are interfaces for extracting resume text and analyzing it against a job. `AnalysisResult` carries the score and feedback.
+- `UnsupportedResumeException` represents a permanent input failure and is never retried. Any other exception is transient and is retried up to three attempts total.
+- `ProcessResumeAnalysis` runs on the `ai` queue. `SharedServiceProvider` registers `QueueResumeAnalysis` for `ApplicationSubmitted`; the listener creates the pending analysis and dispatches the job.
+- Any application running a worker for `ai` **must bind both interfaces** in its container. An application that only dispatches the job, such as Backoffice, must not bind them and must not run the `ai` queue.
+- The job sends only job context and resume text to the analyzer, never applicant profile data, and it never changes the Application status.
+- After changing this package, bump and tag its version, then run `composer update shagalni/shared` in both applications, following the deployment order below.
+
 ## Local development
 
 The applications may use a Composer path repository pointing to a sibling
