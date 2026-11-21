@@ -10,6 +10,7 @@ use Shagalni\Shared\Events\ApplicationWithdrawn;
 use Shagalni\Shared\Listeners\NotifyCompanyOwnerOfNewApplication;
 use Shagalni\Shared\Listeners\NotifyCompanyOwnerOfWithdrawal;
 use Shagalni\Shared\Listeners\NotifyJobSeekerOfStatusChange;
+use Shagalni\Shared\Listeners\QueueResumeAnalysis;
 use Shagalni\Shared\Models\ApplicationStatusHistory;
 use Shagalni\Shared\Observers\ApplicationStatusHistoryObserver;
 
@@ -22,5 +23,6 @@ class SharedServiceProvider extends ServiceProvider
         Event::listen(ApplicationStatusUpdated::class, NotifyJobSeekerOfStatusChange::class);
         Event::listen(ApplicationWithdrawn::class, NotifyCompanyOwnerOfWithdrawal::class);
         Event::listen(ApplicationSubmitted::class, NotifyCompanyOwnerOfNewApplication::class);
+        Event::listen(ApplicationSubmitted::class, QueueResumeAnalysis::class);
     }
 }
