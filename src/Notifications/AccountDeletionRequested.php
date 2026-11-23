@@ -7,11 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
-use Shagalni\Shared\Services\AccountLifecycleService;
 
 class AccountDeletionRequested extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    private const GRACE_PERIOD_DAYS = 30;
 
     public int $tries = 3;
 
@@ -28,7 +29,7 @@ class AccountDeletionRequested extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         $requestedAt = $notifiable->deletion_requested_at;
-        $expiresAt = $requestedAt->copy()->addDays(AccountLifecycleService::DELETION_GRACE_DAYS);
+        $expiresAt = $requestedAt->copy()->addDays(self::GRACE_PERIOD_DAYS);
         $cancelUrl = URL::temporarySignedRoute(
             'account-deletion.cancel',
             $expiresAt,
@@ -42,7 +43,7 @@ class AccountDeletionRequested extends Notification implements ShouldQueue
             ->subject('Account Deletion Request')
             ->greeting('Hello '.$notifiable->full_name.',')
             ->line('We received your request to delete your account.')
-            ->line('Your account is scheduled for deletion after '.AccountLifecycleService::DELETION_GRACE_DAYS.' days.')
+            ->line('Your account is scheduled for deletion after '.self::GRACE_PERIOD_DAYS.' days.')
             ->action('Cancel Deletion Request', $cancelUrl)
             ->line('This link can be used once and expires when your 30-day grace period ends.')
             ->line('If you did not request this, you can ignore this email.');

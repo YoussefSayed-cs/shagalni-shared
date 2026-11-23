@@ -7,11 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
-use Shagalni\Shared\Services\AccountLifecycleService;
 
 class AccountReactivationRequested extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    private const REACTIVATION_LINK_HOURS = 24;
 
     public int $tries = 3;
 
@@ -26,7 +27,7 @@ class AccountReactivationRequested extends Notification implements ShouldQueue
     {
         $url = URL::temporarySignedRoute(
             'account-reactivation.confirm',
-            now()->addHours(AccountLifecycleService::REACTIVATION_LINK_HOURS),
+            now()->addHours(self::REACTIVATION_LINK_HOURS),
             [
                 'user' => $notifiable->getRouteKey(),
                 'token' => $this->token,
