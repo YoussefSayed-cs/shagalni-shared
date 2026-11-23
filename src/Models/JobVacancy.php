@@ -15,6 +15,27 @@ use Shagalni\Shared\Enums\JobStatus;
 use Shagalni\Shared\Enums\RegistrationStatus;
 use Shagalni\Shared\Enums\WorkLocationType;
 
+/**
+ * @property string $id
+ * @property string $company_id
+ * @property string $job_category_id
+ * @property string $title
+ * @property string $description
+ * @property string $requirements
+ * @property string $location
+ * @property EmploymentType $employment_type
+ * @property WorkLocationType $work_location_type
+ * @property string|null $required_skills
+ * @property string|null $salary_min
+ * @property string|null $salary_max
+ * @property ExperienceLevel|null $experience_level
+ * @property Carbon|null $application_deadline
+ * @property JobStatus $status
+ * @property Carbon|null $archived_at
+ * @property Carbon|null $created_at
+ * @property-read Company|null $company
+ * @property-read JobCategory|null $category
+ */
 class JobVacancy extends Model
 {
     use HasUuids;
@@ -67,20 +88,24 @@ class JobVacancy extends Model
 
     /**
      * Single eligibility rule used for public visibility and applying.
-     * Active job, valid deadline, Approved company, and active owner without a deletion request.
+     * Active job, valid deadline, Approved company, and active owner.
      */
     public function isAcceptingApplications(): bool
     {
-        if ($this->status !== JobStatus::Active || $this->isExpired()) {
+        $status = $this->getAttribute('status');
+
+        if ($status !== JobStatus::Active || $this->isExpired()) {
             return false;
         }
 
         $company = $this->company;
 
+        $owner = $company?->owner;
+
         return $company !== null
             && $company->registration_status === RegistrationStatus::Approved
-            && $company->owner?->status === AccountStatus::Active
-            && $company->owner?->deletion_requested_at === null;
+            && $owner !== null
+            && $owner->status === AccountStatus::Active;
     }
 
     /**
@@ -98,27 +123,38 @@ class JobVacancy extends Model
             ->whereHas('company', function (Builder $company) {
                 $company->where('registration_status', RegistrationStatus::Approved->value)
                     ->whereHas('owner', function (Builder $owner) {
-                        $owner->where('status', AccountStatus::Active->value)
-                            ->whereNull('deletion_requested_at');
+                        $owner->where('status', AccountStatus::Active->value);
                     });
             });
     }
 
+    /**
+     * @return BelongsTo<Company, $this>
+     */
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
+    /**
+     * @return BelongsTo<JobCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(JobCategory::class, 'job_category_id');
     }
 
+    /**
+     * @return HasMany<Application, $this>
+     */
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
     }
 
+    /**
+     * @return HasMany<SavedJob, $this>
+     */
     public function savedJobs(): HasMany
     {
         return $this->hasMany(SavedJob::class);

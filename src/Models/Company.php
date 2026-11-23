@@ -46,26 +46,41 @@ class Company extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');
     }
 
+    /**
+     * @return HasMany<JobVacancy, $this>
+     */
     public function jobVacancies(): HasMany
     {
         return $this->hasMany(JobVacancy::class);
     }
 
+    /**
+     * @return HasMany<Application, $this>
+     */
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
     }
 
+    /**
+     * @return HasMany<CompanyChangeRequest, $this>
+     */
     public function changeRequests(): HasMany
     {
         return $this->hasMany(CompanyChangeRequest::class);
