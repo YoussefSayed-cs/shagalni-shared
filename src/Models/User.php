@@ -3,8 +3,6 @@
 namespace Shagalni\Shared\Models;
 
 use Database\Factories\UserFactory;
-use Shagalni\Shared\Enums\AccountStatus;
-use Shagalni\Shared\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -15,8 +13,24 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Shagalni\Shared\Enums\AccountStatus;
+use Shagalni\Shared\Enums\UserRole;
 
+/**
+ * @property string $id
+ * @property string $full_name
+ * @property string $email
+ * @property Carbon|null $email_verified_at
+ * @property string $phone
+ * @property string|null $profile_picture
+ * @property string $password
+ * @property UserRole $role
+ * @property AccountStatus $status
+ * @property Carbon|null $deletion_requested_at
+ * @property Carbon|null $anonymized_at
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, HasUuids, Notifiable;

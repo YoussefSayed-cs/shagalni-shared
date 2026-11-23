@@ -6,8 +6,23 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Shagalni\Shared\Enums\RegistrationStatus;
 
+/**
+ * @property string $id
+ * @property string $owner_id
+ * @property string $name
+ * @property string|null $description
+ * @property string $industry
+ * @property string $location
+ * @property string|null $website
+ * @property string|null $logo
+ * @property RegistrationStatus $registration_status
+ * @property string|null $rejection_reason
+ * @property string|null $reviewed_by
+ * @property Carbon|null $reviewed_at
+ */
 class Company extends Model
 {
     use HasUuids;
