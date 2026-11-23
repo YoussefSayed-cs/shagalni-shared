@@ -129,6 +129,31 @@ class JobVacancy extends Model
     }
 
     /**
+     * Compose title, category, and location search filters.
+     *
+     * @param  Builder<JobVacancy>  $query
+     * @param  array<string, mixed>  $filters
+     */
+    public function scopeSearchFilters(Builder $query, array $filters): void
+    {
+        $title = trim((string) ($filters['title'] ?? ''));
+        $location = trim((string) ($filters['location'] ?? ''));
+        $categoryId = $filters['job_category_id'] ?? null;
+
+        if ($title !== '') {
+            $query->whereLike('title', "%{$title}%", false);
+        }
+
+        if (is_string($categoryId) && $categoryId !== '') {
+            $query->where('job_category_id', $categoryId);
+        }
+
+        if ($location !== '') {
+            $query->whereLike('location', "%{$location}%", false);
+        }
+    }
+
+    /**
      * @return BelongsTo<Company, $this>
      */
     public function company(): BelongsTo
